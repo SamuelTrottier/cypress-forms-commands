@@ -7,7 +7,7 @@ type FormValues = {
 }
 
 type FieldMap = {
-  type: FieldType;
+  type: 'text' | 'select';
   selector: string;
   choiceSelectors?: ChoiceSelectors;
 }
@@ -15,8 +15,6 @@ type FieldMap = {
 type ChoiceSelectors = {
   [key: string]: string
 }
-
-declare type FieldType = 'text' | 'select';
 
 declare namespace Cypress {
   interface Chainable {

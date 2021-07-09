@@ -13,7 +13,7 @@ Cypress.Commands.add("fillForm", (mapper: FormMapper, values: FormValues) => {
       fillTextField(fieldMap, value);
     }
     else if (fieldMap.type === 'select') {
-      fillTextField(fieldMap, value);
+      fillSelectField(fieldMap, value);
     }
   });
 });
