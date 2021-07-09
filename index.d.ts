@@ -16,12 +16,7 @@ type ChoiceSelectors = {
   [key: string]: string
 }
 
-declare enum FieldType {
-  text,
-  radio,
-  checkbox,
-  select,
-}
+declare type FieldType = 'text' | 'select';
 
 declare namespace Cypress {
   interface Chainable {

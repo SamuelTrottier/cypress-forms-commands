@@ -9,10 +9,10 @@ Cypress.Commands.add("fillForm", (mapper: FormMapper, values: FormValues) => {
     if (!value) {
       throw new Error(`Value not set for value to fill with key: '${key}'`);
     }
-    if (fieldMap.type === FieldType.text) {
+    if (fieldMap.type === 'text') {
       fillTextField(fieldMap, value);
     }
-    else if (fieldMap.type === FieldType.select) {
+    else if (fieldMap.type === 'select') {
       fillTextField(fieldMap, value);
     }
   });
