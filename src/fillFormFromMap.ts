@@ -10,10 +10,10 @@ Cypress.Commands.add("fillFormFromMap", (mapper: FormMapper, values: FormValues)
       throw new Error(`Value not set for value to fill with key: '${key}'`);
     }
     if (fieldMap.type === 'text') {
-      fillTextField(fieldMap, value);
+      fillTextField(fieldMap, value as string);
     }
     else if (fieldMap.type === 'select') {
-      fillSelectField(fieldMap, value);
+      fillSelectField(fieldMap, value as string);
     }
   });
 });
