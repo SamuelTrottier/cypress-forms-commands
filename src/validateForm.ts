@@ -15,10 +15,13 @@ Cypress.Commands.add("validateForm", (values: FormValues) => {
           break;
         case FieldType.radio:
           validateCheck(key, value as string);
+          break;
         case FieldType.text:
           validateTextField(key, value as string|number);
+          break;
         case FieldType.select:
           validateSelectField(key, value as string|number);
+          break;
       }
     });
   });

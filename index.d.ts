@@ -20,6 +20,6 @@ declare namespace Cypress {
   interface Chainable {
     fillForm(formValues: FormValues): Chainable<void>;
     fillFormFromMap(formMapper: FormMapper, formValues: FormValues): Chainable<void>;
-    validateForm(formMapper: FormMapper, formValues: FormValues): Chainable<void>;
+    validateForm(formValues: FormValues): Chainable<void>;
   }
 }

@@ -16,10 +16,13 @@ Cypress.Commands.add("fillForm", (values: FormValues) => {
           break;
         case FieldType.radio:
           checkInput(key, value as string);
+          break;
         case FieldType.text:
           fillTextField(key, value as string|number);
+          break;
         case FieldType.select:
           fillSelectField(key, value as string|number);
+          break;
       }
     });
   });

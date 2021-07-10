@@ -9,7 +9,7 @@ It provides two main functions:
 
 ## Form Filling
 
-The fillForm commands has two versions: `fillForm` and `fillFormFromMap`.
+Two commands are available for form filling: `fillForm` and `fillFormFromMap`.
 
 #### fillForm
 
@@ -30,7 +30,7 @@ The command will detect automatically the input type of the field so it can appr
 
 Note that for select, checkboxes and radio buttons, the name of the option **value attribute** must also **match the value** passed for each key.
 
-**Here is an example of a simple form being filled with the `fillForm` command:**
+**Here is a complete example of a simple form being filled with the `fillForm` command:**
 
 ```html
 <!-- index.html -->
@@ -81,3 +81,27 @@ cy.fillForm({
 
 ![asd](./docs/demo.gif)
 
+## Form Validation
+
+Just like for form filling, two commands are available for form validation: `validateForm` and `validateFormFromMap`.
+
+##### validateForm
+
+The `validateForm` command takes the exact same parameter as the `fillForm` command. The only difference is that instead of filling the form, it validates that all the fields have the values in the object passed to the command.
+
+**Here is a complete example of how to use the command to validate a form with `validateForm`:**
+
+```js
+// spec.ts
+cy.validateForm({
+  username: 'TestsSlayer', // text field
+  completeName: 'John Simpleman', // text field
+  age: 34, // number field
+  city: 'montreal', // select
+  interests: [
+    'coding', // checkbox
+    'climbing', // checkbox
+  ],
+  transport: 'public-transport', // radio button
+})
+```

@@ -3,19 +3,22 @@ import EnvVariableProvider from "./EnvVariableProvider";
 export function getFieldType(key: string, value: string|number|string[], callback: (fieldType: FieldType) => void) {
   if (Array.isArray(value)) {
     callback(FieldType.checkbox);
+    return;
   }
   getFieldFromName(key, (e) => {
     if (e.tagName === 'INPUT') {
       if (e.getAttribute('type') === 'radio') {
         callback(FieldType.radio);
-        return;
+      } else {
+        callback(FieldType.text);
       }
-      callback(FieldType.text);
     }
     else if (e.tagName === 'SELECT') {
-      callback(FieldType.text);
+      callback(FieldType.select);
     }
-    throw new Error(`Could not determine field type from key: '${key}' and value: '${value}'.`);
+    else {
+      throw new Error(`Could not determine field type from key: '${key}' and value: '${value}'.`);
+    }
   })
 }
 
