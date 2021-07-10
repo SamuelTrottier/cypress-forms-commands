@@ -10,7 +10,8 @@
   "scripts": {
     "clean": "rimraf dist/*",
     "build": "npm run clean && tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "docker-compose -f test-environment/docker-compose.yml up -d & cypress run",
+    "test:open": "docker-compose -f test-environment/docker-compose.yml up -d & cypress open -d"
   },
   "author": "Samuel Trottier",
   "license": "ISC",

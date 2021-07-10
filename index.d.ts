@@ -3,7 +3,7 @@ type FormMapper = {
 }
 
 type FormValues = {
-  [key: string]: string | undefined;
+  [key: string]: string | number | string[] | undefined;
 }
 
 type FieldMap = {
@@ -18,6 +18,8 @@ type ChoiceSelectors = {
 
 declare namespace Cypress {
   interface Chainable {
-    fillForm(formMapper: FormMapper, formValues: FormValues): Chainable<void>;
+    fillForm(formValues: FormValues): Chainable<void>;
+    fillFormFromMap(formMapper: FormMapper, formValues: FormValues): Chainable<void>;
+    validateForm(formMapper: FormMapper, formValues: FormValues): Chainable<void>;
   }
 }

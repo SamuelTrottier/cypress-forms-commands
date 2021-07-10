@@ -1,0 +1,68 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div>
+    <form>
+      <div class="form-control">
+        <label>Username:</label><input type="text" cy-f="username">
+      </div>
+      <div class="form-control">
+        <label>Complete Name:</label><input type="text" cy-f="completeName">
+      </div>
+      <div class="form-control">
+        <label>Age:</label><input type="number" cy-f="age">
+      </div>
+      <div class="form-control">
+        <label>
+          City:
+        </label>
+        <select cy-f="city">
+          <option value="">--Please choose a city--</option>
+          <option value="Calgary">Calgary</option>
+          <option value="Edmonton">Edmonton</option>
+          <option value="Montreal">Montreal</option>
+          <option value="Ottawa">Ottawa</option>
+          <option value="Toronto">Toronto</option>
+        </select>
+      </div>
+      <div class="form-control">
+        <label>Interests:</label>
+        <div>
+          <div>
+            <label><input type="checkbox" cy-f="interests" name="interests" value="climbing">Climbing</label>
+          </div>
+          <div>
+            <label><input type="checkbox" cy-f="interests" name="interests" value="coding">Coding</label>
+          </div>
+          <div>
+            <label><input type="checkbox" cy-f="interests" name="interests" value="cycling">Cycling</label>
+          </div>
+          <div>
+            <label><input type="checkbox" cy-f="interests" name="interests" value="gaming">Gaming</label>
+          </div>
+        </div>
+      </div>
+      <div class="form-control">
+        <label>Prefered mean of transportation:</label>
+        <div>
+          <div>
+            <label><input type="radio" cy-f="transport" name="transport" value="bike">Bike</label>
+          </div>
+          <div>
+            <label><input type="radio" cy-f="transport" name="transport" value="public-transport">Public transport</label>
+          </div>
+          <div>
+            <label><input type="radio" cy-f="transport" name="transport" value="car">Car</label>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

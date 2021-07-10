@@ -1,31 +1,50 @@
-Cypress.Commands.add("fillForm", (mapper: FormMapper, values: FormValues) => {
+import EnvVariableProvider from "./helpers/EnvVariableProvider";
+
+
+Cypress.Commands.add("fillForm", (values: FormValues) => {
   cy.log('Filling form');
   Object.keys(values).forEach((key) => {
-    const fieldMap = mapper[key];
     const value = values[key];
-    if (!fieldMap) {
-      throw new Error(`No field in mapper matches key: '${key}'`);
-    }
     if (!value) {
       throw new Error(`Value not set for value to fill with key: '${key}'`);
     }
-    if (fieldMap.type === 'text') {
-      fillTextField(fieldMap, value);
+    if (Array.isArray(value)) {
+      value.forEach(v => {
+        checkInput(key, v);
+      })
+      return;
     }
-    else if (fieldMap.type === 'select') {
-      fillSelectField(fieldMap, value);
-    }
+    getFieldFromName(key, (e) => {
+      if (e.tagName === 'INPUT') {
+        if (e.getAttribute('type') === 'radio') {
+          checkInput(key, value);
+          return;
+        }
+        fillTextField(key, value);
+      }
+      else if (e.tagName === 'SELECT') {
+        fillSelectField(key, value);
+      }
+    })
   });
 });
 
-function fillTextField(fieldMap: FieldMap, value: string) {
-  cy.get(fieldMap.selector).type(value);
+function checkInput(key: string, value: string | number) {
+  cy.get(`[${EnvVariableProvider.handleAttribute}=${key}][value=${value}]`).check();
 }
 
-function fillSelectField(fieldMap: FieldMap, value: string) {
-  if (!fieldMap.choiceSelectors) {
-    throw new Error("Choices to be selected are not set in fieldMap. Make sure you have set the 'choiceSelectors' field in the field map.")
-  }
-  cy.get(fieldMap.selector).click();
-  cy.get(fieldMap.choiceSelectors[value]).click();
+function getFieldFromName(key: string, callback: (e: HTMLElement) => void) {
+  return cy.get(`[${EnvVariableProvider.handleAttribute}=${key}]`)
+    .then($el => {
+      callback($el.get(0));
+    })
+}
+
+function fillTextField(key: string, value: string | number) {
+  cy.get(`[${EnvVariableProvider.handleAttribute}=${key}]`).type(`${value}`);
+}
+
+function fillSelectField(key: string, value: string | number) {
+  cy.get(`[${EnvVariableProvider.handleAttribute}=${key}]`)
+    .select(`${value}`);
 }
