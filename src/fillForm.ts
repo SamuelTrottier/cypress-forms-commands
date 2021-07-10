@@ -1,4 +1,5 @@
 import EnvVariableProvider from "./helpers/EnvVariableProvider";
+import { FieldType, getFieldType } from "./helpers/fieldTypeChecker";
 
 
 Cypress.Commands.add("fillForm", (values: FormValues) => {
@@ -8,36 +9,24 @@ Cypress.Commands.add("fillForm", (values: FormValues) => {
     if (!value) {
       throw new Error(`Value not set for value to fill with key: '${key}'`);
     }
-    if (Array.isArray(value)) {
-      value.forEach(v => {
-        checkInput(key, v);
-      })
-      return;
-    }
-    getFieldFromName(key, (e) => {
-      if (e.tagName === 'INPUT') {
-        if (e.getAttribute('type') === 'radio') {
-          checkInput(key, value);
-          return;
-        }
-        fillTextField(key, value);
+    getFieldType(key, value, (fieldType) => {
+      switch(fieldType) {
+        case FieldType.checkbox:
+          (value as string[]).forEach(v => checkInput(key, v));
+          break;
+        case FieldType.radio:
+          checkInput(key, value as string);
+        case FieldType.text:
+          fillTextField(key, value as string|number);
+        case FieldType.select:
+          fillSelectField(key, value as string|number);
       }
-      else if (e.tagName === 'SELECT') {
-        fillSelectField(key, value);
-      }
-    })
+    });
   });
 });
 
 function checkInput(key: string, value: string | number) {
   cy.get(`[${EnvVariableProvider.handleAttribute}=${key}][value=${value}]`).check();
-}
-
-function getFieldFromName(key: string, callback: (e: HTMLElement) => void) {
-  return cy.get(`[${EnvVariableProvider.handleAttribute}=${key}]`)
-    .then($el => {
-      callback($el.get(0));
-    })
 }
 
 function fillTextField(key: string, value: string | number) {

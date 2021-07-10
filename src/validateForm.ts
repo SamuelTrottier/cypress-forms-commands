@@ -1,27 +1,37 @@
-Cypress.Commands.add("validateForm", (mapper: FormMapper, values: FormValues) => {
+import EnvVariableProvider from "./helpers/EnvVariableProvider";
+import { FieldType, getFieldType } from "./helpers/fieldTypeChecker";
+
+Cypress.Commands.add("validateForm", (values: FormValues) => {
   cy.log('Filling form');
   Object.keys(values).forEach((key) => {
-    const fieldMap = mapper[key];
     const value = values[key];
-    if (!fieldMap) {
-      throw new Error(`No field in mapper matches key: '${key}'`);
-    }
     if (!value) {
       throw new Error(`Value not set for value to fill with key: '${key}'`);
     }
-    if (fieldMap.type === 'text') {
-      validateTextField(fieldMap, value);
-    }
-    else if (fieldMap.type === 'select') {
-      validateSelectField(fieldMap, value);
-    }
+    getFieldType(key, value, (fieldType) => {
+      switch(fieldType) {
+        case FieldType.checkbox:
+          (value as string[]).forEach(v => validateCheck(key, v));
+          break;
+        case FieldType.radio:
+          validateCheck(key, value as string);
+        case FieldType.text:
+          validateTextField(key, value as string|number);
+        case FieldType.select:
+          validateSelectField(key, value as string|number);
+      }
+    });
   });
 });
 
-function validateTextField(fieldMap: FieldMap, value: string) {
-  cy.get(fieldMap.selector).should('have.value', value);
+function validateTextField(key: string, value: string|number) {
+  cy.get(`[${EnvVariableProvider.handleAttribute}=${key}]`).should('have.value', value);
 }
 
-function validateSelectField(fieldMap: FieldMap, value: string) {
-  cy.get
+function validateSelectField(key: string, value: string|number) {
+  cy.get(`[${EnvVariableProvider.handleAttribute}=${key}]`).should('have.value', value);
+}
+
+function validateCheck(key: string, value: string) {
+  cy.get(`[${EnvVariableProvider.handleAttribute}=${key}][value=${value}]`).should('be.checked');
 }
