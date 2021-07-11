@@ -21,6 +21,8 @@ jobs:
       - name: Test
         run: npm run test
   release:
+    needs: test
+    if: success()
     name: Release
     runs-on: ubuntu-18.04
     steps:

@@ -8,7 +8,7 @@ describe('example to-do app', () => {
       username: 'TestsSlayer',
       completeName: 'John Simpleman',
       age: 34,
-      city: 'Montreal',
+      city: 'montreal',
       interests: [
         'coding',
         'climbing',
