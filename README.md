@@ -1,6 +1,6 @@
 # cypress-forms-commands
 
-**cypress-forms-commands** is a set of commands destined to simplify form filling and validation.
+**cypress-forms-commands** is a set of commands destined to simplify form filling and validation, by making it really easy to write and read tests that fill or validate forms.
 
 It provides two main functions:
 
@@ -9,7 +9,7 @@ It provides two main functions:
 
 ## Form Filling
 
-Two commands are available for form filling: `fillForm` and `fillFormFromMap`.
+You can fill a form using the `fillForm` command.
 
 #### fillForm
 
@@ -64,6 +64,8 @@ Note that for select, checkboxes and radio buttons, the name of the option **val
 
 ```js
 // spec.ts
+
+// the actual code needed to fill the form described in the html above
 cy.fillForm({
   username: 'TestsSlayer',
   completeName: 'John Simpleman',
@@ -83,7 +85,7 @@ cy.fillForm({
 
 ## Form Validation
 
-Just like for form filling, two commands are available for form validation: `validateForm` and `validateFormFromMap`.
+The library also provides a simple way to validate a form content.
 
 ##### validateForm
 
@@ -105,3 +107,109 @@ cy.validateForm({
   transport: 'public-transport', // radio button
 })
 ```
+
+## Field Mappers
+
+In the previous examples, we saw some pretty simple cases with really simple html elements, but things are not always that simple. You might be using a framework that do not use real `select` tags or `checkboxes` for example.
+
+In those cases, **you'll have to use field mappers as the second parameter** of the `fillForm` and `validateForm` commands.
+
+A field mapper tells the command how to deal with a specific field in the form, by specifying the type of field, and the necessary selector to deal with the field.
+
+Here's the structure of a mapper:
+
+| Key             | Required for types            | Description                                                                 |
+| --------------- | ----------------------------- | --------------------------------------------------------------------------- |
+| type            | **ALL**                       | The type of selector to map. Can be `text`, `select`, `checkbox` or `radio` |
+| selector        | `text`, `select`              | The main selector of the input. Only applies to `text` and `select`.        |
+| choiceSelectors | `select`, `checkbox`, `radio` | The selector for each choice.                                               |
+
+Let's see how you can map different field types:
+
+#### Text input
+
+```js
+{
+  type: 'text',
+  selector: '#username-input'
+}
+```
+
+#### Select
+
+```js
+{
+  type: 'select',
+  selector: '#city-select' // the element that has to be clicked to expand the select
+  choiceSelectors: {
+    calgary: '#calgary-select-option'
+    montreal: '#montreal-select-option',
+    toronto: '#toronto-select-option',
+  }
+}
+```
+
+#### Checkboxes
+
+```js
+{
+  type: 'checkbox',
+  choiceSelectors: {
+    climbing: '#climbing-checkbox'
+    coding: '#coding-checkbox',
+    cycling: '#cycling-checkbox',
+    gaming: '#gaming-checkbox',
+  }
+}
+```
+
+#### Radio
+
+```js
+{
+  type: 'radio',
+  choiceSelectors: {
+    bike: '#bike-radio'
+    publicTransport: '#public-transport-radio',
+    car: '#car-radio',
+  }
+}
+```
+
+**Here is an example where we use the mappers to map the `checkboxes` and the `select` from the first example**
+
+```js
+// spec.ts
+cy.fillForm({
+  username: 'TestsSlayer',
+  completeName: 'John Simpleman',
+  age: 34,
+  city: 'montreal',
+  interests: [
+    'coding',
+    'climbing',
+  ],
+  transport: 'public-transport',
+}, {
+  city: { // the key matches 'city' from the values to fill
+    type: 'select',
+    selector: '#city-select'
+    choiceSelectors: {
+      calgary: '#calgary-select-option'
+      montreal: '#montreal-select-option',
+      toronto: '#toronto-select-option',
+    }
+  }
+  interests: { // the key matches 'interests' from the values to fill
+    type: 'checkbox',
+    choiceSelectors: {
+      climbing: '#climbing-checkbox'
+      coding: '#coding-checkbox',
+      cycling: '#cycling-checkbox',
+      gaming: '#gaming-checkbox',
+    }
+  },
+})
+```
+
+**Note that the keys in the mappers must match those from the values to fill (eg. '`interests`' === '`interests`')**
