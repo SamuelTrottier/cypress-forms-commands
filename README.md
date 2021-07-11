@@ -7,6 +7,35 @@ It provides two main functions:
 * **Form filling**
 * **Form validation**
 
+## Getting started
+
+Install the package
+
+`npm install cypress-forms-commands --save-dev`
+
+Import the package in your cypress project in the file described by the `supportFile` parameter in your cypress configuration (`cypress.json` file).
+
+`import 'cypress-forms-commands';`
+
+If using typescript, include the types in your `tsconfig.json` file:
+
+```json
+{
+    //...
+    "compilerOptions": {
+        // ...
+        "types": [
+          //...
+          "cypress",
+          "cypress-forms-commands"
+        ]
+    }
+}
+
+```
+
+You're good to go!
+
 ## Form Filling
 
 You can fill a form using the `fillForm` command.
